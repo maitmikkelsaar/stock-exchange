@@ -8,12 +8,28 @@ group = 'ee.mikkelsaar'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
+apply from: "$rootProject.projectDir/gradle/jooq.gradle"
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+
+    annotationProcessor "org.projectlombok:lombok:1.18.20"
+    compileOnly "org.projectlombok:lombok:1.18.20"
+
+    implementation 'org.apache.poi:poi-ooxml:5.0.0'
+
+    runtimeOnly 'org.postgresql:postgresql:42.2.23'
+    implementation 'org.jooq:jooq:3.14.13'
+    implementation 'org.flywaydb:flyway-core:7.14.1'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

@@ -1,0 +1,17 @@
+.days {
+  margin: 0 0 2em 0;
+  list-style-type: none;
+  padding: 0;
+  width: 21em;
+}
+.days a {
+  cursor: pointer;
+}
+.days a:hover {
+  color: #2c3a41;
+  background-color: #e6e6e6;
+  left: .1em;
+}
+.days a:link {
+  text-decoration: none;
+}
