@@ -1,8 +1,10 @@
 package ee.mikkelsaar.stockapi.service.impl;
 
 import ee.mikkelsaar.stockapi.client.NasdaqClient;
+import ee.mikkelsaar.stockapi.dao.jooq.ShareJooqDao;
 import ee.mikkelsaar.stockapi.model.GainersDecliners;
 import ee.mikkelsaar.stockapi.model.ShareValue;
+import ee.mikkelsaar.stockapi.model.TimeRangeRequest;
 import ee.mikkelsaar.stockapi.service.ExcelParser;
 import ee.mikkelsaar.stockapi.service.ShareService;
 import ee.mikkelsaar.tables.daos.ShareDao;
@@ -24,6 +26,7 @@ public class ShareServiceImpl implements ShareService {
   private final NasdaqClient nasdaqClient;
   private final ExcelParser excelParser;
   private final ShareDao shareDao;
+  private final ShareJooqDao shareJooqDao;
 
   @Override
   public List<Share> fetchShares(final LocalDateTime toGet) {
@@ -67,6 +70,11 @@ public class ShareServiceImpl implements ShareService {
         .limit(6L)
         .map(share -> new ShareValue(share.getName(), share.getTurnover()))
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<ShareValue> getTimeRangeVolumes(TimeRangeRequest timeRangeRequest) {
+    return shareJooqDao.findAllInRange(timeRangeRequest);
   }
 
   private List<ShareValue> getGainers(final List<Share> shares) {

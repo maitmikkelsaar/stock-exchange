@@ -11,12 +11,18 @@ import { DayDetailComponent } from './day-detail/day-detail.component';
 import { MatGridListModule} from "@angular/material/grid-list";
 import {MatTableModule} from "@angular/material/table";
 import {MatTabsModule} from "@angular/material/tabs";
+import { StockVolumeComponent } from './stock-volume/stock-volume.component';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {ReactiveFormsModule} from "@angular/forms";
+import {MatNativeDateModule} from "@angular/material/core";
 
 @NgModule({
   declarations: [
     AppComponent,
     DaysComponent,
-    DayDetailComponent
+    DayDetailComponent,
+    StockVolumeComponent
   ],
   imports: [
     BrowserModule,
@@ -26,7 +32,11 @@ import {MatTabsModule} from "@angular/material/tabs";
     MatListModule,
     MatGridListModule,
     MatTableModule,
-    MatTabsModule
+    MatTabsModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    ReactiveFormsModule,
+    MatNativeDateModule
   ],
   providers: [],
   bootstrap: [AppComponent]

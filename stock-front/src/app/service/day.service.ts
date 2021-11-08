@@ -4,6 +4,8 @@ import {Observable, of} from "rxjs";
 import {Day} from "../model/day";
 import { catchError } from 'rxjs/operators';
 import {Details} from "../model/details";
+import {ShareValue} from "../model/shareValue";
+import {TimeRangeRequest} from "../model/timeRangeRequest";
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +27,14 @@ export class DayService {
     return this.http.get<Details>(url).pipe(
       catchError(this.handleError<Details>(`getDayDetails id=${id}`))
     );
+  }
+
+  getVolumes(start: Date, end: Date): Observable<ShareValue[]> {
+    const url = `${this.daysUrl}/detail/volume`;
+    var body: TimeRangeRequest = {start, end};
+    return this.http.post<ShareValue[]>(url, body).pipe(
+      catchError(this.handleError<ShareValue[]>(`getVolumes start=${start}, end=${end}`))
+    )
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
