@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Day } from '../day';
+import { Day } from '../model/day';
 import { DayService } from '../service/day.service';
 
 @Component({

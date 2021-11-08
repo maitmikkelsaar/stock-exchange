@@ -1,3 +1,3 @@
 <mat-list class="days">
-  <a mat-list-item *ngFor="let day of days"> {{day.date | date:'shortDate'}} </a>
+  <a mat-list-item routerLink="/detail/{{day.id}}" *ngFor="let day of days"> {{day.date | date:'shortDate'}} </a>
 </mat-list>

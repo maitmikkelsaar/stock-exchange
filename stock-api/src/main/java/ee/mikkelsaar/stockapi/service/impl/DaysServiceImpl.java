@@ -3,6 +3,9 @@ package ee.mikkelsaar.stockapi.service.impl;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 import ee.mikkelsaar.stockapi.dao.jooq.DayJooqDao;
+import ee.mikkelsaar.stockapi.model.Details;
+import ee.mikkelsaar.stockapi.model.GainersDecliners;
+import ee.mikkelsaar.stockapi.model.ShareValue;
 import ee.mikkelsaar.stockapi.service.DaysService;
 import ee.mikkelsaar.stockapi.service.ShareService;
 import ee.mikkelsaar.tables.daos.DayDao;
@@ -28,7 +31,7 @@ public class DaysServiceImpl implements DaysService {
   }
 
   @Override
-  public long countDaysToQuery(LocalDateTime dateTime) {
+  public long countDaysToQuery(final LocalDateTime dateTime) {
 
     Optional<LocalDateTime> lastDate = getLastDate();
 
@@ -51,5 +54,15 @@ public class DaysServiceImpl implements DaysService {
     final List<Share> shareList = shareService.fetchShares(toGet);
 
     dayJooqDao.upsertDayWithShares(toGet, shareList);
+  }
+
+  public Details getDetails(Long dayId) {
+    List<Share> allByDay = shareService.getAllByDay(dayId);
+
+    GainersDecliners gainersDecliners = shareService.getGainersDecliners(allByDay);
+    List<ShareValue> mostActive = shareService.mostActive(allByDay);
+    List<ShareValue> biggestTurnover = shareService.biggestTurnover(allByDay);
+
+    return new Details(gainersDecliners, mostActive, biggestTurnover);
   }
 }

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {Observable, of} from "rxjs";
-import {Day} from "../day";
+import {Day} from "../model/day";
 import { catchError } from 'rxjs/operators';
+import {Details} from "../model/details";
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,13 @@ export class DayService {
   getDays(): Observable<Day[]> {
     return this.http.get<Day[]>(this.daysUrl).pipe(
       catchError(this.handleError<Day[]>('getDays', []))
+    );
+  }
+
+  getDayDetails(id: number): Observable<Details> {
+    const url = `${this.daysUrl}/${id}/detail`;
+    return this.http.get<Details>(url).pipe(
+      catchError(this.handleError<Details>(`getDayDetails id=${id}`))
     );
   }
 
