@@ -1,0 +1,13 @@
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:3.1.4"
+    }
+}
+
+apply plugin: com.google.cloud.tools.jib.gradle.JibPlugin
+
+jib.container.creationTime = 'USE_CURRENT_TIMESTAMP'
+jib.to.image = "stock-api"

@@ -6,13 +6,14 @@ import { catchError } from 'rxjs/operators';
 import {Details} from "../model/details";
 import {ShareValue} from "../model/shareValue";
 import {TimeRangeRequest} from "../model/timeRangeRequest";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DayService {
 
-  private daysUrl = 'http://localhost:8080/days';
+  private daysUrl = environment.stockApiUrl + '/days';
 
   constructor(private http: HttpClient) { }
 

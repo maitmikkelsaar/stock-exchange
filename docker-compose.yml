@@ -11,5 +11,24 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
       - ./create-database.sh:/docker-entrypoint-initdb.d/create-databases.sh
+  stock-api:
+    image: stock-api:latest
+    container_name: stock-api
+    hostname: stock-api
+    ports:
+      - 18000:8080
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/stock
+      SETTINGS_CORS_ORIGIN: '*'
+  stock-front:
+    image: stock-front:latest
+    container_name: stock-front
+    hostname: stock-front
+    ports:
+      - 18001:80
+    depends_on:
+      - stock-api
 volumes:
   postgres-data: null

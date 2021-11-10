@@ -9,6 +9,7 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 apply from: "$rootProject.projectDir/gradle/jooq.gradle"
+apply from: "$rootProject.projectDir/gradle/jib.gradle"
 
 repositories {
     mavenCentral()
