@@ -6,7 +6,7 @@ import ee.mikkelsaar.stockapi.model.GainersDecliners;
 import ee.mikkelsaar.stockapi.model.ShareValue;
 import ee.mikkelsaar.stockapi.model.TimeRangeRequest;
 import ee.mikkelsaar.stockapi.service.ExcelParser;
-import ee.mikkelsaar.stockapi.service.ShareService;
+import ee.mikkelsaar.stockapi.service.SharesService;
 import ee.mikkelsaar.tables.daos.ShareDao;
 import ee.mikkelsaar.tables.pojos.Share;
 import java.math.BigDecimal;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class ShareServiceImpl implements ShareService {
+public class SharesServiceImpl implements SharesService {
 
   private final NasdaqClient nasdaqClient;
   private final ExcelParser excelParser;
@@ -53,7 +53,7 @@ public class ShareServiceImpl implements ShareService {
   }
 
   @Override
-  public List<ShareValue> mostActive(final List<Share> allByDay) {
+  public List<ShareValue> getMostActive(final List<Share> allByDay) {
     return allByDay.stream()
         .filter(share -> Objects.nonNull(share.getTrades()))
         .sorted(Comparator.comparingLong(Share::getTrades).reversed())
@@ -63,7 +63,7 @@ public class ShareServiceImpl implements ShareService {
   }
 
   @Override
-  public List<ShareValue> biggestTurnover(final List<Share> allByDay) {
+  public List<ShareValue> getBiggestTurnover(final List<Share> allByDay) {
     return allByDay.stream()
         .filter(share -> Objects.nonNull(share.getTurnover()))
         .sorted(Comparator.comparing(Share::getTurnover).reversed())

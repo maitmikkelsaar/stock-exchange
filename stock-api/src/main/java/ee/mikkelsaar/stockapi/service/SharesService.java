@@ -7,7 +7,7 @@ import ee.mikkelsaar.tables.pojos.Share;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface ShareService {
+public interface SharesService {
 
   List<Share> fetchShares(LocalDateTime toGet);
 
@@ -15,9 +15,9 @@ public interface ShareService {
 
   GainersDecliners getGainersDecliners(List<Share> allByDay);
 
-  List<ShareValue> mostActive(List<Share> allByDay);
+  List<ShareValue> getMostActive(List<Share> allByDay);
 
-  List<ShareValue> biggestTurnover(List<Share> allByDay);
+  List<ShareValue> getBiggestTurnover(List<Share> allByDay);
 
   List<ShareValue> getTimeRangeVolumes(TimeRangeRequest timeRangeRequest);
 }

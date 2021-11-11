@@ -7,7 +7,7 @@ import ee.mikkelsaar.stockapi.model.Details;
 import ee.mikkelsaar.stockapi.model.GainersDecliners;
 import ee.mikkelsaar.stockapi.model.ShareValue;
 import ee.mikkelsaar.stockapi.service.DaysService;
-import ee.mikkelsaar.stockapi.service.ShareService;
+import ee.mikkelsaar.stockapi.service.SharesService;
 import ee.mikkelsaar.tables.daos.DayDao;
 import ee.mikkelsaar.tables.pojos.Day;
 import ee.mikkelsaar.tables.pojos.Share;
@@ -23,7 +23,7 @@ public class DaysServiceImpl implements DaysService {
 
   private final DayDao dayDao;
   private final DayJooqDao dayJooqDao;
-  private final ShareService shareService;
+  private final SharesService sharesService;
 
   @Override
   public List<Day> getDays() {
@@ -51,17 +51,17 @@ public class DaysServiceImpl implements DaysService {
   public void getAndStoreDayData(final LocalDateTime now, final long nrOfDays) {
     final LocalDateTime toGet = now.minusDays(nrOfDays);
 
-    final List<Share> shareList = shareService.fetchShares(toGet);
+    final List<Share> shareList = sharesService.fetchShares(toGet);
 
     dayJooqDao.upsertDayWithShares(toGet, shareList);
   }
 
   public Details getDetails(Long dayId) {
-    List<Share> allByDay = shareService.getAllByDay(dayId);
+    List<Share> allByDay = sharesService.getAllByDay(dayId);
 
-    GainersDecliners gainersDecliners = shareService.getGainersDecliners(allByDay);
-    List<ShareValue> mostActive = shareService.mostActive(allByDay);
-    List<ShareValue> biggestTurnover = shareService.biggestTurnover(allByDay);
+    GainersDecliners gainersDecliners = sharesService.getGainersDecliners(allByDay);
+    List<ShareValue> mostActive = sharesService.getMostActive(allByDay);
+    List<ShareValue> biggestTurnover = sharesService.getBiggestTurnover(allByDay);
 
     return new Details(gainersDecliners, mostActive, biggestTurnover);
   }

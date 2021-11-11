@@ -4,7 +4,7 @@ import ee.mikkelsaar.stockapi.model.Details;
 import ee.mikkelsaar.stockapi.model.ShareValue;
 import ee.mikkelsaar.stockapi.model.TimeRangeRequest;
 import ee.mikkelsaar.stockapi.service.DaysService;
-import ee.mikkelsaar.stockapi.service.ShareService;
+import ee.mikkelsaar.stockapi.service.SharesService;
 import ee.mikkelsaar.tables.pojos.Day;
 import java.util.List;
 import javax.validation.constraints.DecimalMin;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DaysController {
 
   private final DaysService daysService;
-  private final ShareService shareService;
+  private final SharesService sharesService;
 
   @GetMapping
   public List<Day> getDays() {
@@ -37,6 +37,6 @@ public class DaysController {
 
   @PostMapping("/detail/volume")
   public List<ShareValue> getDetails(@RequestBody TimeRangeRequest timeRangeRequest) {
-    return shareService.getTimeRangeVolumes(timeRangeRequest);
+    return sharesService.getTimeRangeVolumes(timeRangeRequest);
   }
 }
