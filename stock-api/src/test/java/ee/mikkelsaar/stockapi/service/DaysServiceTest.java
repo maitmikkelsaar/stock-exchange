@@ -5,7 +5,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import ee.mikkelsaar.stockapi.dao.jooq.DayJooqDao;
+import ee.mikkelsaar.stockapi.dao.jooq.DaysJooqDao;
 import ee.mikkelsaar.stockapi.service.impl.DaysServiceImpl;
 import ee.mikkelsaar.stockapi.service.impl.SharesServiceImpl;
 import ee.mikkelsaar.tables.pojos.Share;
@@ -22,10 +22,10 @@ class DaysServiceTest {
 
     LocalDateTime now = LocalDateTime.now();
 
-    DayJooqDao dayJooqDao = Mockito.mock(DayJooqDao.class);
-    DaysService daysService = new DaysServiceImpl(null, dayJooqDao, null);
+    DaysJooqDao daysJooqDao = Mockito.mock(DaysJooqDao.class);
+    DaysService daysService = new DaysServiceImpl(null, daysJooqDao, null);
 
-    when(dayJooqDao.getLastDate()).thenReturn(Optional.of(now));
+    when(daysJooqDao.getLastDate()).thenReturn(Optional.of(now));
 
     long count = daysService.countDaysToQuery(now);
     assertEquals(0, count);
@@ -36,10 +36,10 @@ class DaysServiceTest {
 
     LocalDateTime now = LocalDateTime.now();
 
-    DayJooqDao dayJooqDao = Mockito.mock(DayJooqDao.class);
-    DaysService daysService = new DaysServiceImpl(null, dayJooqDao, null);
+    DaysJooqDao daysJooqDao = Mockito.mock(DaysJooqDao.class);
+    DaysService daysService = new DaysServiceImpl(null, daysJooqDao, null);
 
-    when(dayJooqDao.getLastDate()).thenReturn(Optional.empty());
+    when(daysJooqDao.getLastDate()).thenReturn(Optional.empty());
 
     long count = daysService.countDaysToQuery(now);
     assertEquals(9, count);
@@ -50,10 +50,10 @@ class DaysServiceTest {
 
     LocalDateTime now = LocalDateTime.now();
 
-    DayJooqDao dayJooqDao = Mockito.mock(DayJooqDao.class);
-    DaysService daysService = new DaysServiceImpl(null, dayJooqDao, null);
+    DaysJooqDao daysJooqDao = Mockito.mock(DaysJooqDao.class);
+    DaysService daysService = new DaysServiceImpl(null, daysJooqDao, null);
 
-    when(dayJooqDao.getLastDate()).thenReturn(Optional.of(now.minusDays(10)));
+    when(daysJooqDao.getLastDate()).thenReturn(Optional.of(now.minusDays(10)));
 
     long count = daysService.countDaysToQuery(now);
     assertEquals(9, count);
@@ -64,10 +64,10 @@ class DaysServiceTest {
 
     LocalDateTime now = LocalDateTime.now();
 
-    DayJooqDao dayJooqDao = Mockito.mock(DayJooqDao.class);
-    DaysService daysService = new DaysServiceImpl(null, dayJooqDao, null);
+    DaysJooqDao daysJooqDao = Mockito.mock(DaysJooqDao.class);
+    DaysService daysService = new DaysServiceImpl(null, daysJooqDao, null);
 
-    when(dayJooqDao.getLastDate()).thenReturn(Optional.of(now.minusDays(5)));
+    when(daysJooqDao.getLastDate()).thenReturn(Optional.of(now.minusDays(5)));
 
     long count = daysService.countDaysToQuery(now);
     assertEquals(5, count);
@@ -76,9 +76,9 @@ class DaysServiceTest {
   @Test
   void getAndStoreDayData() {
 
-    DayJooqDao dayJooqDao = Mockito.mock(DayJooqDao.class);
+    DaysJooqDao daysJooqDao = Mockito.mock(DaysJooqDao.class);
     SharesService sharesService = Mockito.mock(SharesServiceImpl.class);
-    DaysService daysService = new DaysServiceImpl(null, dayJooqDao, sharesService);
+    DaysService daysService = new DaysServiceImpl(null, daysJooqDao, sharesService);
 
     LocalDateTime time = LocalDateTime.now();
     int nrOfDays = 2;
@@ -89,6 +89,6 @@ class DaysServiceTest {
 
     daysService.getAndStoreDayData(time, nrOfDays);
 
-    verify(dayJooqDao).upsertDayWithShares(timeToGet, list);
+    verify(daysJooqDao).upsertDayWithShares(timeToGet, list);
   }
 }

@@ -1,10 +1,14 @@
 package ee.mikkelsaar.stockapi.model;
 
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class GainersDecliners {
-  private final List<ShareValue> gainers;
-  private final List<ShareValue> decliners;
+  private List<ShareValue> gainers;
+  private List<ShareValue> decliners;
 }

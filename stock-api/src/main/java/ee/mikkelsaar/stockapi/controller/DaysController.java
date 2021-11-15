@@ -36,7 +36,7 @@ public class DaysController {
   }
 
   @PostMapping("/detail/volume")
-  public List<ShareValue> getDetails(@RequestBody TimeRangeRequest timeRangeRequest) {
+  public List<ShareValue> getVolume(@RequestBody TimeRangeRequest timeRangeRequest) {
     return sharesService.getTimeRangeVolumes(timeRangeRequest);
   }
 }

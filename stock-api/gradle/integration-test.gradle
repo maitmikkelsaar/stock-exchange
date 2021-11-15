@@ -1,0 +1,48 @@
+
+// https://docs.gradle.org/current/userguide/java_testing.html#sec:configuring_java_integration_tests
+
+sourceSets {
+    intTest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+
+configurations {
+    intTestImplementation.extendsFrom implementation
+    intTestRuntimeOnly.extendsFrom runtimeOnly
+    intTestEclipse.extendsFrom intTestImplementation // ecplise plugin workaround for "Resolving configuration 'intTestImplementation' directly is not allowed"
+}
+
+task integrationTest(type: Test) {
+    useJUnitPlatform() // use Junit5
+    description = 'Run integration tests.'
+    group = 'verification'
+    testClassesDirs = sourceSets.intTest.output.classesDirs
+    classpath = sourceSets.intTest.runtimeClasspath
+    shouldRunAfter test
+    ignoreFailures=true
+}
+
+apply plugin: 'eclipse'
+
+eclipse {
+    classpath {
+        plusConfigurations += [ configurations.intTestEclipse ]
+    }
+}
+
+dependencies {
+    intTestAnnotationProcessor "org.projectlombok:lombok:1.18.20"
+    intTestCompileOnly "org.projectlombok:lombok:1.18.20"
+
+    intTestImplementation "org.springframework:spring-test"
+    intTestImplementation "org.springframework.boot:spring-boot-test"
+    intTestImplementation "org.springframework.boot:spring-boot-test-autoconfigure"
+
+    intTestImplementation "org.junit.jupiter:junit-jupiter-api:5.7.2"
+    intTestImplementation "org.assertj:assertj-core:3.21.0"
+    intTestImplementation "org.mockito:mockito-core:4.0.0"
+
+    intTestRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.7.2"
+}

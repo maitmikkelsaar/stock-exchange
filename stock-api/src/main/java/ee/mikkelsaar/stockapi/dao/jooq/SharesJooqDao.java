@@ -7,6 +7,7 @@ import static org.jooq.impl.DSL.sum;
 
 import ee.mikkelsaar.stockapi.model.ShareValue;
 import ee.mikkelsaar.stockapi.model.TimeRangeRequest;
+import ee.mikkelsaar.tables.pojos.Day;
 import ee.mikkelsaar.tables.pojos.Share;
 import ee.mikkelsaar.tables.records.ShareRecord;
 import java.math.BigDecimal;
@@ -22,9 +23,61 @@ import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository
-public class ShareJooqDao {
+public class SharesJooqDao {
 
   private final DSLContext dsl;
+
+  public Share insert(final Share share) {
+    return dsl.insertInto(
+        SHARE,
+        SHARE.DAY,
+        SHARE.TICKER,
+        SHARE.NAME,
+        SHARE.ISIN,
+        SHARE.CURRENCY,
+        SHARE.MARKETPLACE,
+        SHARE.LIST,
+        SHARE.AVERAGE_PRICE,
+        SHARE.OPEN_PRICE,
+        SHARE.HIGH_PRICE,
+        SHARE.LOW_PRICE,
+        SHARE.LAST_CLOSE_PRICE,
+        SHARE.LAST_PRICE,
+        SHARE.PRICE_CHANGE_PERCENTAGE,
+        SHARE.BEST_BID,
+        SHARE.BEST_ASK,
+        SHARE.TRADES,
+        SHARE.VOLUME,
+        SHARE.TURNOVER,
+        SHARE.INDUSTRY,
+        SHARE.SUPERSECTOR)
+        .values(
+            share.getDay(),
+            share.getTicker(),
+            share.getName(),
+            share.getIsin(),
+            share.getCurrency(),
+            share.getMarketplace(),
+            share.getList(),
+            share.getAveragePrice(),
+            share.getOpenPrice(),
+            share.getHighPrice(),
+            share.getLowPrice(),
+            share.getLastClosePrice(),
+            share.getLastPrice(),
+            share.getPriceChangePercentage(),
+            share.getBestBid(),
+            share.getBestAsk(),
+            share.getTrades(),
+            share.getVolume(),
+            share.getTurnover(),
+            share.getIndustry(),
+            share.getSupersector())
+        .returning()
+        .fetchOptional()
+        .orElseThrow(() -> new RuntimeException("Unable to get inserted Share"))
+        .into(Share.class);
+  }
 
   public void upsert(List<Share> shares, Configuration configuration) {
     List<InsertOnDuplicateSetMoreStep<ShareRecord>> steps = shares.stream().map(share ->
@@ -92,16 +145,16 @@ public class ShareJooqDao {
     DSL.using(configuration).batch(steps).execute();
   }
 
-  public List<ShareValue> findAllInRange(TimeRangeRequest timeRangeRequest) {
-    Field<BigDecimal> total = sum(SHARE.VOLUME).as("total");
-    return dsl.select(SHARE.NAME, total)
+  public List<ShareValue> findTopVolumesInRange(TimeRangeRequest timeRangeRequest) {
+    Field<BigDecimal> value = sum(SHARE.VOLUME).as("value");
+    return dsl.select(SHARE.NAME, value)
         .from(DAY)
         .join(SHARE)
         .on(DAY.ID.eq(SHARE.DAY))
         .where(DAY.DATE.between(timeRangeRequest.getStart(), timeRangeRequest.getEnd()))
         .and(SHARE.VOLUME.isNotNull())
         .groupBy(SHARE.NAME)
-        .orderBy(total.desc())
+        .orderBy(value.desc())
         .limit(10)
         .fetchInto(ShareValue.class);
   }

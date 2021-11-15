@@ -15,10 +15,10 @@ import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository
-public class DayJooqDao {
+public class DaysJooqDao {
 
   private final DSLContext dsl;
-  private final ShareJooqDao shareJooqDao;
+  private final SharesJooqDao sharesJooqDao;
 
   public Day insert(final LocalDateTime dateTime, final Configuration configuration) {
     return DSL.using(configuration).insertInto(
@@ -33,13 +33,13 @@ public class DayJooqDao {
   public Optional<LocalDateTime> getLastDate() {
     return dsl.select(DAY.DATE)
         .from(DAY)
-        .orderBy(DAY.ID.desc())
+        .orderBy(DAY.DATE.desc())
         .limit(1)
         .fetchOptionalInto(LocalDateTime.class);
   }
 
-  public void upsertDayWithShares(LocalDateTime dateTime, List<Share> shareList) {
-    dsl.transaction(configuration -> {
+  public Day upsertDayWithShares(LocalDateTime dateTime, List<Share> shareList) {
+    return dsl.transactionResult(configuration -> {
 
       Optional<Day> optionalDay = DSL.using(configuration)
           .selectFrom(DAY)
@@ -49,7 +49,8 @@ public class DayJooqDao {
       Day day = optionalDay.orElseGet(() -> insert(dateTime, configuration));
       shareList.forEach(share -> share.setDay(day.getId()));
 
-      shareJooqDao.upsert(shareList, configuration);
+      sharesJooqDao.upsert(shareList, configuration);
+      return day;
     });
   }
 }

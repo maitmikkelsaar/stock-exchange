@@ -2,7 +2,7 @@ package ee.mikkelsaar.stockapi.service.impl;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
-import ee.mikkelsaar.stockapi.dao.jooq.DayJooqDao;
+import ee.mikkelsaar.stockapi.dao.jooq.DaysJooqDao;
 import ee.mikkelsaar.stockapi.model.Details;
 import ee.mikkelsaar.stockapi.model.GainersDecliners;
 import ee.mikkelsaar.stockapi.model.ShareValue;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 public class DaysServiceImpl implements DaysService {
 
   private final DayDao dayDao;
-  private final DayJooqDao dayJooqDao;
+  private final DaysJooqDao daysJooqDao;
   private final SharesService sharesService;
 
   @Override
@@ -44,7 +44,7 @@ public class DaysServiceImpl implements DaysService {
   }
 
   public Optional<LocalDateTime> getLastDate() {
-    return dayJooqDao.getLastDate();
+    return daysJooqDao.getLastDate();
   }
 
   @Override
@@ -53,7 +53,7 @@ public class DaysServiceImpl implements DaysService {
 
     final List<Share> shareList = sharesService.fetchShares(toGet);
 
-    dayJooqDao.upsertDayWithShares(toGet, shareList);
+    daysJooqDao.upsertDayWithShares(toGet, shareList);
   }
 
   public Details getDetails(Long dayId) {

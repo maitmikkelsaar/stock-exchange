@@ -1,12 +1,16 @@
 package ee.mikkelsaar.stockapi.model;
 
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class Details {
-  private final GainersDecliners gainersDecliners;
-  private final List<ShareValue> mostActive;
-  private final List<ShareValue> biggestTurnover;
+  private GainersDecliners gainersDecliners;
+  private List<ShareValue> mostActive;
+  private List<ShareValue> biggestTurnover;
 }
 

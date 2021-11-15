@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+  postgres:
+    image: postgres:11
+    container_name: postgres-test
+    hostname: postgres-test
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./create-database.sh:/docker-entrypoint-initdb.d/create-databases.sh
+volumes:
+  postgres-data: null
