@@ -112,22 +112,6 @@ public class DaysControllerTest {
   }
 
   @Test
-  public void getDetails_exception_dayNegative() throws Exception {
-
-    long dayId = -1L;
-    Details expectedDetails = getDetails();
-
-    Mockito.when(daysService.getDetails(dayId))
-        .thenReturn(expectedDetails);
-
-    String url = String.format("/days/%s/detail", dayId);
-    MvcResult result = mockMvc.perform(get(url))
-        .andDo(print())
-        .andExpect(status().isOk())
-        .andReturn();
-  }
-
-  @Test
   public void getVolume_success() throws Exception {
 
     TimeRangeRequest timeRangeRequest = new TimeRangeRequest(LocalDateTime.now().minusDays(1), LocalDateTime.now());

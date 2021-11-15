@@ -4,7 +4,6 @@ import ee.mikkelsaar.stockapi.exception.ApiException;
 import ee.mikkelsaar.stockapi.service.ExcelParser;
 import ee.mikkelsaar.tables.pojos.Share;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;

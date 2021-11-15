@@ -1,14 +1,15 @@
 package ee.mikkelsaar.stockapi.service;
 
 import static ee.mikkelsaar.stockapi.service.impl.ExcelParserImpl.XSSFWORKBOOK_ERROR;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import ee.mikkelsaar.stockapi.exception.ApiException;
 import ee.mikkelsaar.stockapi.service.impl.ExcelParserImpl;
 import ee.mikkelsaar.tables.pojos.Share;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
