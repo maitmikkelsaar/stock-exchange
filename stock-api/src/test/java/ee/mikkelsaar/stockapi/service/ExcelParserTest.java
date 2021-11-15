@@ -1,17 +1,38 @@
 package ee.mikkelsaar.stockapi.service;
 
+import static ee.mikkelsaar.stockapi.service.impl.ExcelParserImpl.XSSFWORKBOOK_ERROR;
 import static org.junit.jupiter.api.Assertions.*;
 
+import ee.mikkelsaar.stockapi.exception.ApiException;
 import ee.mikkelsaar.stockapi.service.impl.ExcelParserImpl;
 import ee.mikkelsaar.tables.pojos.Share;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 import org.junit.jupiter.api.Test;
 
 class ExcelParserTest {
+
+  @Test
+  void parse_success_emptyByteArray() {
+    ExcelParser excelParser = new ExcelParserImpl();
+
+    byte[] file = {};
+    Exception exception = assertThrows(Exception.class, () -> excelParser.parse(file));
+    assertTrue(exception.getMessage().startsWith(XSSFWORKBOOK_ERROR));
+  }
+
+  @Test
+  void parse_success_notValidOOXML() {
+    ExcelParser excelParser = new ExcelParserImpl();
+
+    byte[] file = "Bad stream".getBytes();
+    ApiException exception = assertThrows(ApiException.class, () -> excelParser.parse(file));
+    assertTrue(exception.getMessage().startsWith(XSSFWORKBOOK_ERROR));
+  }
 
   @Test
   void parse_success_withAllFields() throws IOException {

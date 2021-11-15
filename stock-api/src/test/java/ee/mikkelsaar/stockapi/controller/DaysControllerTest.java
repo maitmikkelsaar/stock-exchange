@@ -88,7 +88,6 @@ public class DaysControllerTest {
     assertEquals(expectedDayList, daysResponse);
   }
 
-  // TODO - Mait Mikkelsaar - 14 Nov 2021 - validation exception
   @Test
   public void getDetails_success() throws Exception {
 
@@ -110,6 +109,22 @@ public class DaysControllerTest {
         .readValue(content, Details.class);
 
     assertEquals(expectedDetails, detailsResponse);
+  }
+
+  @Test
+  public void getDetails_exception_dayNegative() throws Exception {
+
+    long dayId = -1L;
+    Details expectedDetails = getDetails();
+
+    Mockito.when(daysService.getDetails(dayId))
+        .thenReturn(expectedDetails);
+
+    String url = String.format("/days/%s/detail", dayId);
+    MvcResult result = mockMvc.perform(get(url))
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andReturn();
   }
 
   @Test

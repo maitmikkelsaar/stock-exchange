@@ -7,8 +7,6 @@ import ee.mikkelsaar.stockapi.service.DaysService;
 import ee.mikkelsaar.stockapi.service.SharesService;
 import ee.mikkelsaar.tables.pojos.Day;
 import java.util.List;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +29,7 @@ public class DaysController {
   }
 
   @GetMapping("/{id}/detail")
-  public Details getDetails(@PathVariable @NotNull @DecimalMin("0") Long id) {
+  public Details getDetails(@PathVariable Long id) {
     return daysService.getDetails(id);
   }
 

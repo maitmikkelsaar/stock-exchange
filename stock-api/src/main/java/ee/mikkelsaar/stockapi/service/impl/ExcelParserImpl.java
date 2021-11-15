@@ -1,5 +1,6 @@
 package ee.mikkelsaar.stockapi.service.impl;
 
+import ee.mikkelsaar.stockapi.exception.ApiException;
 import ee.mikkelsaar.stockapi.service.ExcelParser;
 import ee.mikkelsaar.tables.pojos.Share;
 import java.io.ByteArrayInputStream;
@@ -10,46 +11,58 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class ExcelParserImpl implements ExcelParser {
 
+  public static final String XSSFWORKBOOK_ERROR = "Could not read xlsx InputStream to XSSFWorkbook due to ";
+
   @Override
   public List<Share> parse(byte[] xlsx) {
-    InputStream outputStream = new ByteArrayInputStream(xlsx);
+    InputStream inputStream = new ByteArrayInputStream(xlsx);
     Workbook workbook;
     try {
-      workbook = new XSSFWorkbook(outputStream);
-    } catch (IOException e) {
-      // TODO - Mait Mikkelsaar - 25 Oct 2021 - handle exception
-      throw new IllegalArgumentException("Unable to get workbook");
+      workbook = new XSSFWorkbook(inputStream);
+    } catch (Exception e) {
+      String message = XSSFWORKBOOK_ERROR + e;
+      log.error(message);
+      throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, message);
     }
     Sheet datatypeSheet = workbook.getSheetAt(0);
     Iterator<Row> iterator = datatypeSheet.iterator();
 
-    // TODO - Mait Mikkelsaar - 25 Oct 2021 - read first heading line
-    iterator.next();
+    readSheetHeadings(iterator);
 
+    return mapAllRowsToShares(iterator);
+  }
+
+  private void readSheetHeadings(Iterator<Row> iterator) {
+    iterator.next();
+  }
+
+  private List<Share> mapAllRowsToShares(Iterator<Row> iterator) {
     List<Share> shares = new ArrayList<>();
 
     while (iterator.hasNext()) {
       Row currentRow = iterator.next();
 
-      Share share = mapRowToStock(currentRow);
+      Share share = mapRowToShare(currentRow);
       shares.add(share);
     }
-
     return shares;
   }
 
-  private Share mapRowToStock(Row currentRow) {
+  private Share mapRowToShare(Row currentRow) {
     Share share = new Share();
     share.setTicker(currentRow.getCell(0).getStringCellValue());
     share.setName(currentRow.getCell(1).getStringCellValue());
