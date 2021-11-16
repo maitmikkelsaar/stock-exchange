@@ -20,7 +20,6 @@ export class DaysComponent implements OnInit {
   getDays(): void {
     this.dayService.getDays()
     .subscribe(days => {
-      console.log(days);
       this.days = days;});
   }
 
