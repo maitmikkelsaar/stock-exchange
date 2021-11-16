@@ -15,3 +15,8 @@ docker build -t stock-front .
 ```sh
 docker-compose up -d
 ```
+
+## Run stock-api locally with dev profile (CORS config)
+```sh
+./gradlew :bootRun --args='--spring.profiles.active=dev'
+```

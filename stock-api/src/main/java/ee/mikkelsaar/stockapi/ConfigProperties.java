@@ -12,5 +12,6 @@ import org.springframework.context.annotation.Configuration;
 public class ConfigProperties {
 
   private String nasdaqUrl;
+  private String stockFrontUrl;
 
 }
