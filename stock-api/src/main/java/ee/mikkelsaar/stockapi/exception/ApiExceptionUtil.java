@@ -11,7 +11,11 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApiExceptionUtil {
+
     private static final ObjectMapper objectMapper = new ObjectMapper();
+    public static final String TIMESTAMP = "timestamp";
+    public static final String MESSAGE = "message";
+    public static final String STATUS = "status";
 
     public static String convertErrorToJSON(Exception error) throws IOException {
         return convertErrorToJSON(error.toString());
@@ -19,16 +23,16 @@ public class ApiExceptionUtil {
 
     public static String convertErrorToJSON(String message) throws IOException {
         Map<String, Object> error = new HashMap<>();
-        error.put("timestamp", LocalDateTime.now().toString());
-        error.put("message", message);
+        error.put(TIMESTAMP, LocalDateTime.now().toString());
+        error.put(MESSAGE, message);
         return objectMapper.writeValueAsString(error);
     }
 
     public static String convertErrorToJSON(ApiException er) throws JsonProcessingException {
         Map<String, Object> error = new HashMap<>();
-        error.put("timestamp", LocalDateTime.now().toString());
-        error.put("status", er.getStatus());
-        error.put("message", er.getMessage());
+        error.put(TIMESTAMP, LocalDateTime.now().toString());
+        error.put(STATUS, er.getStatus());
+        error.put(MESSAGE, er.getMessage());
 
         return objectMapper.writeValueAsString(error);
     }

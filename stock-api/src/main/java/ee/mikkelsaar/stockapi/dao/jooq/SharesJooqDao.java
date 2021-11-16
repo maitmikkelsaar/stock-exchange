@@ -7,7 +7,6 @@ import static org.jooq.impl.DSL.sum;
 
 import ee.mikkelsaar.stockapi.model.ShareValue;
 import ee.mikkelsaar.stockapi.model.TimeRangeRequest;
-import ee.mikkelsaar.tables.pojos.Day;
 import ee.mikkelsaar.tables.pojos.Share;
 import ee.mikkelsaar.tables.records.ShareRecord;
 import java.math.BigDecimal;

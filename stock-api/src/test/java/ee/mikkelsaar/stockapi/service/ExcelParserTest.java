@@ -17,6 +17,10 @@ import org.junit.jupiter.api.Test;
 
 class ExcelParserTest {
 
+  public static final String FILES_SHARES_XLSX = "files/shares.xlsx";
+  public static final String FILES_SHARES_EMPTY_XLSX = "files/shares_empty.xlsx";
+  public static final String BAD_STREAM = "Bad stream";
+
   @Test
   void parse_success_emptyByteArray() {
     ExcelParser excelParser = new ExcelParserImpl();
@@ -30,7 +34,7 @@ class ExcelParserTest {
   void parse_success_notValidOOXML() {
     ExcelParser excelParser = new ExcelParserImpl();
 
-    byte[] file = "Bad stream".getBytes();
+    byte[] file = BAD_STREAM.getBytes();
     ApiException exception = assertThrows(ApiException.class, () -> excelParser.parse(file));
     assertTrue(exception.getMessage().startsWith(XSSFWORKBOOK_ERROR));
   }
@@ -39,7 +43,7 @@ class ExcelParserTest {
   void parse_success_withAllFields() throws IOException {
     ExcelParser excelParser = new ExcelParserImpl();
 
-    byte[] file = this.getClass().getClassLoader().getResourceAsStream("files/shares.xlsx").readAllBytes();
+    byte[] file = this.getClass().getClassLoader().getResourceAsStream(FILES_SHARES_XLSX).readAllBytes();
     List<Share> shareList = excelParser.parse(file);
 
     assertEquals(13, shareList.size());
@@ -77,7 +81,7 @@ class ExcelParserTest {
   void parse_success_withNullValues() throws IOException {
     ExcelParser excelParser = new ExcelParserImpl();
 
-    byte[] file = this.getClass().getClassLoader().getResourceAsStream("files/shares.xlsx").readAllBytes();
+    byte[] file = this.getClass().getClassLoader().getResourceAsStream(FILES_SHARES_XLSX).readAllBytes();
     List<Share> shareList = excelParser.parse(file);
 
     assertEquals(13, shareList.size());
@@ -100,7 +104,7 @@ class ExcelParserTest {
   void parse_success_emptyFile() throws IOException {
     ExcelParser excelParser = new ExcelParserImpl();
 
-    byte[] file = this.getClass().getClassLoader().getResourceAsStream("files/shares_empty.xlsx").readAllBytes();
+    byte[] file = this.getClass().getClassLoader().getResourceAsStream(FILES_SHARES_EMPTY_XLSX).readAllBytes();
     List<Share> shareList = excelParser.parse(file);
 
     assertTrue(shareList.isEmpty());

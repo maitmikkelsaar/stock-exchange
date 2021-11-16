@@ -35,6 +35,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @TestInstance(Lifecycle.PER_CLASS)
 public class DaysControllerTest {
 
+  public static final String DAYS_PATH = "/days";
   private MockMvc mockMvc;
 
   @Mock
@@ -58,7 +59,7 @@ public class DaysControllerTest {
     List<Day> dayList = List.of();
     Mockito.when(daysService.getDays()).thenReturn(dayList);
 
-    MvcResult result = mockMvc.perform(get("/days"))
+    MvcResult result = mockMvc.perform(get(DAYS_PATH))
         .andDo(print())
         .andExpect(status().isOk())
         .andReturn();
@@ -75,7 +76,7 @@ public class DaysControllerTest {
     List<Day> expectedDayList = List.of(day1, day2);
     Mockito.when(daysService.getDays()).thenReturn(expectedDayList);
 
-    MvcResult result = mockMvc.perform(get("/days"))
+    MvcResult result = mockMvc.perform(get(DAYS_PATH))
         .andDo(print())
         .andExpect(status().isOk())
         .andReturn();
@@ -97,7 +98,7 @@ public class DaysControllerTest {
     Mockito.when(daysService.getDetails(dayId))
         .thenReturn(expectedDetails);
 
-    String url = String.format("/days/%s/detail", dayId);
+    String url = String.format(DAYS_PATH + "/%s/detail", dayId);
     MvcResult result = mockMvc.perform(get(url))
         .andDo(print())
         .andExpect(status().isOk())
@@ -123,7 +124,7 @@ public class DaysControllerTest {
         .thenReturn(expectedShareValues);
 
     MvcResult result = mockMvc.perform(
-            post("/days/detail/volume")
+            post(DAYS_PATH + "/detail/volume")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(timeRangeRequest)))
         .andDo(print())
