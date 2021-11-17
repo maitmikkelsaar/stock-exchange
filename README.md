@@ -22,6 +22,12 @@ cd stock-api
 ./gradlew :bootRun --args='--spring.profiles.active=dev'
 ```
 
+## Build stock-front
+```sh
+cd stock-front
+ng build
+```
+
 ## Run stock-front locally
 ```sh
 cd stock-front
