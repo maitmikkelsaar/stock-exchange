@@ -14,9 +14,7 @@ public class ShareJob {
 
   private final DaysService daysService;
 
-  // TODO - Mait Mikkelsaar - 05 Nov 2021 - correct schedule
-  @Scheduled(cron = "0 * * * * *")
-  //@Scheduled(cron = "0 0/30 * * * ?")
+  @Scheduled(cron = "0 0/30 * * * *")
   public void sendReport() {
 
     LocalDateTime now = LocalDateTime.now().truncatedTo(DAYS);
